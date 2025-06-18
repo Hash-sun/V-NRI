@@ -44,28 +44,6 @@ class MLP(nn.Module):
         x = F.elu(self.fc2(x))
         return self.batch_norm(x)
 
-# class Mlp(nn.Module):
-#     """Multilayer perceptron."""
-#
-#     def __init__(
-#             self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0.0
-#     ):
-#         super().__init__()
-#         out_features = out_features or in_features
-#         hidden_features = hidden_features or in_features
-#         self.fc1 = nn.Linear(in_features, hidden_features)
-#         self.act = act_layer()
-#         self.fc2 = nn.Linear(hidden_features, out_features)
-#         self.drop = nn.Dropout(drop)
-#
-#
-#     def forward(self, x):
-#         x = self.fc1(x)
-#         x = self.act(x)
-#         x = self.drop(x)
-#         x = self.fc2(x)
-#         x = self.drop(x)
-#         return x
 
 class Attention(nn.Module):
     def __init__(self, dim, num_heads=8, qkv_bias=False, attn_drop=0., proj_drop=0.):
@@ -123,10 +101,10 @@ class MLPAttenEncoder(nn.Module):
         self.atten6 = EncoderBlock(embed_dim=n_hid)
         if self.factor:
             self.mlp7 = MLP(n_hid * 3, n_hid, n_hid, do_prob)
-            print("Using factor graph MLP encoder.")
+            print("Using factor graph MLP_Attention encoder.")
         else:
             self.mlp7 = MLP(n_hid * 2, n_hid, n_hid, do_prob)
-            print("Using MLP encoder.")
+            print("Using MLP_Attention encoder.")
         self.fc_out = nn.Linear(n_hid, n_out)
         self.init_weights()
 
@@ -139,32 +117,24 @@ class MLPAttenEncoder(nn.Module):
             elif isinstance(m, nn.BatchNorm1d):
                 m.weight.data.fill_(1)
                 m.bias.data.zero_()
-    # def init_weights(self):
-    #     for m in self.modules():
-    #         if isinstance(m, nn.Linear):
-    #             nn.init.xavier_normal_(m.weight.data)
-    #             m.bias.data.fill_(0.1)
+
 
     def edge2node(self, x, rel_rec, rel_send):
-        # NOTE: Assumes that we have the same graph across all samples.
-        # 通过边到节点的信息聚合操作，得到每个节点的邻居信息的平均值
         incoming = torch.matmul(rel_rec.t(), x)
         return incoming / incoming.size(1)
 
     def node2edge(self, x, rel_rec, rel_send):
-        # NOTE: Assumes that we have the same graph across all samples.
-        # 通过节点到边的信息转换操作，得到表示每条边的信息
         receivers = torch.matmul(rel_rec, x)
         senders = torch.matmul(rel_send, x)
         edges = torch.cat([receivers, senders], dim=2)
         return edges
 
     def forward(self, inputs, rel_rec, rel_send):
-        #print("Inputs size:", inputs.size())
+        # print("Inputs size:", inputs.size())
         # Input shape: [num_sims, num_atoms, num_timesteps, num_dims]
         x = inputs.view(inputs.size(0), inputs.size(1), -1)
         # New shape: [num_sims, num_atoms, num_timesteps*num_dims]
-        #print("New Inputs size:", x.size())
+        # print("New Inputs size:", x.size())
         x = self.mlp1(x)  # 2-layer ELU net per node
         # print("atten1 x size:", x.size())
         x = self.node2edge(x, rel_rec, rel_send)
@@ -192,38 +162,6 @@ class MLPAttenEncoder(nn.Module):
         #print("x size:", x.size())
         return self.fc_out(x)
 
-# class MLP(nn.Module):
-#     """Two-layer fully-connected ELU net with batch norm."""
-#
-#     def __init__(self, n_in, n_hid, n_out, do_prob=0.):
-#         super(MLP, self).__init__()
-#         self.fc1 = nn.Linear(n_in, n_hid)
-#         self.fc2 = nn.Linear(n_hid, n_out)
-#         self.bn = nn.BatchNorm1d(n_out)
-#         self.dropout_prob = do_prob
-#
-#         self.init_weights()
-#
-#     def init_weights(self):
-#         for m in self.modules():
-#             if isinstance(m, nn.Linear):
-#                 nn.init.xavier_normal_(m.weight.data)
-#                 m.bias.data.fill_(0.1)
-#             elif isinstance(m, nn.BatchNorm1d):
-#                 m.weight.data.fill_(1)
-#                 m.bias.data.zero_()
-#
-#     def batch_norm(self, inputs):
-#         x = inputs.view(inputs.size(0) * inputs.size(1), -1)
-#         x = self.bn(x)
-#         return x.view(inputs.size(0), inputs.size(1), -1)
-#
-#     def forward(self, inputs):
-#         # Input shape: [num_sims, num_things, num_features]
-#         x = F.elu(self.fc1(inputs))
-#         x = F.dropout(x, self.dropout_prob, training=self.training)
-#         x = F.elu(self.fc2(x))
-#         return self.batch_norm(x)
 
 class CNN(nn.Module):
     def __init__(self, n_in, n_hid, n_out, do_prob=0.):
@@ -294,43 +232,41 @@ class MLPEncoder(nn.Module):
 
     def edge2node(self, x, rel_rec, rel_send):
         # NOTE: Assumes that we have the same graph across all samples.
-        # 通过边到节点的信息聚合操作，得到每个节点的邻居信息的平均值
         incoming = torch.matmul(rel_rec.t(), x)
         return incoming / incoming.size(1)
 
     def node2edge(self, x, rel_rec, rel_send):
         # NOTE: Assumes that we have the same graph across all samples.
-        # 通过节点到边的信息转换操作，得到表示每条边的信息
         receivers = torch.matmul(rel_rec, x)
         senders = torch.matmul(rel_send, x)
         edges = torch.cat([receivers, senders], dim=2)
         return edges
 
     def forward(self, inputs, rel_rec, rel_send):
-        #print("Inputs size:", inputs.size())
+        # print("Inputs size:", inputs.size())
         # Input shape: [num_sims, num_atoms, num_timesteps, num_dims]
         x = inputs.view(inputs.size(0), inputs.size(1), -1)
         # New shape: [num_sims, num_atoms, num_timesteps*num_dims]
-        #print("New Inputs size:", x.size())
+        # print("New Inputs size:", x.size())
         x = self.mlp1(x)  # 2-layer ELU net per node
-        #print("mlp1 x size:", x.size())
+        # print("mlp1 x size:", x.size())
         x = self.node2edge(x, rel_rec, rel_send)
         x = self.mlp2(x)
         x_skip = x
-        #print("mlp2 x size:", x.size())
+        # print("mlp2 x size:", x.size())
         if self.factor:
             x = self.edge2node(x, rel_rec, rel_send)
             x = self.mlp3(x)
-            #print("mlp3 x size:", x.size())
+            # print("mlp3 x size:", x.size())
             x = self.node2edge(x, rel_rec, rel_send)
             x = torch.cat((x, x_skip), dim=2)  # Skip connection
             x = self.mlp4(x)
-            #print("mlp4 x size:", x.size())
+            # print("mlp4 x size:", x.size())
         else:
             x = self.mlp3(x)
             x = torch.cat((x, x_skip), dim=2)  # Skip connection
             x = self.mlp4(x)
-        #print("x size:", x.size())
+        # print("x size:", x.size())
         return self.fc_out(x)
 
 class CNNEncoder(nn.Module):
@@ -410,105 +346,6 @@ class CNNEncoder(nn.Module):
             x = self.mlp3(x)
 
         return self.fc_out(x)
-
-# class TransformerEncoderLayer(nn.Module):
-#
-#     def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1,
-#                  activation="relu", normalize_before=False):
-#         super().__init__()
-#         self.self_attn = MultiheadAttention(d_model, nhead, dropout=dropout)
-#         # Implementation of Feedforward model
-#         self.linear1 = nn.Linear(d_model, dim_feedforward)
-#         self.dropout = nn.Dropout(dropout)
-#         self.linear2 = nn.Linear(dim_feedforward, d_model)
-#
-#         self.norm1 = nn.LayerNorm(d_model)
-#         self.norm2 = nn.LayerNorm(d_model)
-#         self.dropout1 = nn.Dropout(dropout)
-#         self.dropout2 = nn.Dropout(dropout)
-#
-#         self.activation = _get_activation_fn(activation)
-#         self.normalize_before = normalize_before
-#
-#         self.debug_mode = False
-#         self.debug_name = None
-#
-#     def with_pos_embed(self, tensor, pos: Optional[Tensor]):
-#         return tensor if pos is None else tensor + pos
-#
-#     def forward_post(self,
-#                      src,
-#                      src_mask: Optional[Tensor] = None,
-#                      src_key_padding_mask: Optional[Tensor] = None,
-#                      pos: Optional[Tensor] = None):
-#         # print(src.shape,src_key_padding_mask.shape)
-#         q = k = self.with_pos_embed(src, pos)
-#         # print(q.shape,k.shape)
-#         src2, corr = self.self_attn(q, k, value=src, attn_mask=src_mask,
-#                                     key_padding_mask=src_key_padding_mask)
-#
-#         src = src + self.dropout1(src2)
-#         src = self.norm1(src)
-#         src2 = self.linear2(self.dropout(self.activation(self.linear1(src))))
-#         src = src + self.dropout2(src2)
-#         src = self.norm2(src)
-#         return src
-#
-#     def forward_pre(self, src,
-#                     src_mask: Optional[Tensor] = None,
-#                     src_key_padding_mask: Optional[Tensor] = None,
-#                     pos: Optional[Tensor] = None):
-#         src2 = self.norm1(src)
-#         q = k = self.with_pos_embed(src2, pos)
-#         src2 = self.self_attn(q, k, value=src2, attn_mask=src_mask,
-#                               key_padding_mask=src_key_padding_mask)[0]
-#
-#         src = src + self.dropout1(src2)
-#         src2 = self.norm2(src)
-#         src2 = self.linear2(self.dropout(self.activation(self.linear1(src2))))
-#         src = src + self.dropout2(src2)
-#         return src
-#
-#     def forward(self, src,
-#                 src_mask: Optional[Tensor] = None,
-#                 src_key_padding_mask: Optional[Tensor] = None,
-#                 pos: Optional[Tensor] = None):
-#         if self.normalize_before:
-#             return self.forward_pre(src, src_mask, src_key_padding_mask, pos)
-#         return self.forward_post(src, src_mask, src_key_padding_mask, pos)
-#
-# class MLPEncoderWithTransformer(nn.Module):
-#     def __init__(self, n_in, n_hid, n_out, num_layers=6, nhead=8, dim_feedforward=2048, dropout=0.1):
-#         super(MLPEncoderWithTransformer, self).__init__()
-#
-#         self.mlp_encoder = MLP(n_in, n_hid, n_hid)  # GNN编码器中的MLP
-#
-#         # 初始化Transformer编码器
-#         encoder_layers = nn.TransformerEncoderLayer(
-#             d_model=n_hid,
-#             nhead=nhead,
-#             dim_feedforward=dim_feedforward,
-#             dropout=dropout
-#         )
-#         self.transformer_encoder = nn.TransformerEncoder(
-#             encoder_layers,
-#             num_layers=num_layers
-#         )
-#
-#         self.fc_out = nn.Linear(n_hid, n_out)
-#
-#     def forward(self, inputs):
-#         # 使用MLP对输入进行编码
-#         x = inputs.view(inputs.size(0), inputs.size(1), -1)
-#         x = self.mlp_encoder(x)
-#         print(x.size)
-#         x = x.transpose(0, 1)
-#         # Transformer编码器处理MLP的输出
-#         x = self.transformer_encoder(x)
-#
-#         # 将处理后的结果传递给输出层
-#         return self.fc_out(x)
-
 
 class SimulationDecoder(nn.Module):
     """Simulation-based decoder."""

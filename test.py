@@ -8,7 +8,7 @@ from utils import *
 from modules import *
 
 parser = argparse.ArgumentParser(
-    'Neral relational inference for molecular dynamics simulations')
+    'Variant neral relational inference for molecular dynamics simulations')
 parser.add_argument('--num-residues', type=int, default=220,
                     help='Number of residues of the PDB.')
 parser.add_argument('--save-folder', type=str, default='example/logs',
@@ -24,15 +24,9 @@ parser.add_argument('--timesteps', type=int, default=50,
                     help='The number of time steps per sample. Actually is 50')
 parser.add_argument('--prediction-steps', type=int, default=1, metavar='N',
                     help='Num steps to predict before re-using teacher forcing.')
-parser.add_argument('--no-cuda', action='store_true', default=False,
-                    help='Disables CUDA training.')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=100,
-                    help='Number of epochs to train.')
 parser.add_argument('--batch-size', type=int, default=1,
                     help='Number of samples per batch.')
-parser.add_argument('--lr', type=float, default=0.0005,
-                    help='Initial learning rate.')
 parser.add_argument('--encoder-hidden', type=int, default=256,
                     help='Number of hidden units in encoder.')
 parser.add_argument('--decoder-hidden', type=int, default=256,

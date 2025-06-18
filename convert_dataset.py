@@ -106,42 +106,6 @@ def read_feature_MD_file(filename, timestep_size, feature_size, num_residues, in
     return feature
 
 
-# def read_feature_MD_file_slidingwindow(filename, timestep_size, feature_size, num_residues, interval, window_choose, aa_start, aa_end):
-#     # read single expriments of all time points
-#     feature = np.zeros((timestep_size, feature_size, num_residues))
-#
-#     flag = False
-#     nflag = False
-#     modelNum = 0
-#     with open(filename) as f:
-#         lines = f.readlines()
-#         for line in lines:
-#             line = line.strip()
-#             words = line.split()
-#             if(line.startswith("MODEL")):
-#                 modelNum = int(words[1])
-#                 if (modelNum % interval == window_choose):
-#                     flag = True
-#                 if (modelNum % interval == (window_choose+1)):
-#                     nflag = True
-#             elif(line.startswith("ATOM") and words[2] == "CA" and int(words[5]) >= aa_start and int(words[5]) <= aa_end and flag):
-#                 numStep = int(modelNum/interval)
-#                 feature[numStep, 0, int(words[5])-aa_start] = float(words[6])
-#                 feature[numStep, 1, int(words[5])-aa_start] = float(words[7])
-#                 feature[numStep, 2, int(words[5])-aa_start] = float(words[8])
-#             elif(line.startswith("ATOM") and words[2] == "CA" and int(words[5]) >= aa_start and int(words[5]) <= aa_end and nflag):
-#                 numStep = int(modelNum/interval)
-#                 feature[numStep, 3, int(words[5])-aa_start] = float(words[6])-feature[numStep, 0, int(words[5])-aa_start]
-#                 feature[numStep, 4, int(words[5])-aa_start] = float(words[7])-feature[numStep, 1, int(words[5])-aa_start]
-#                 feature[numStep, 5, int(words[5])-aa_start] = float(words[8])-feature[numStep, 2, int(words[5])-aa_start]
-#             elif(line.startswith("TER") and flag):
-#                 flag = False
-#             elif(line.startswith("TER") and nflag):
-#                 nflag = False
-#     f.close()
-#     print(feature.shape)
-#     return feature
-
 def read_feature_MD_file_slidingwindow(filename, timestep_size, feature_size, num_residues, interval, window_choose, aa_start, aa_end):
     # read single expriments of all time points
     feature = np.zeros((timestep_size, feature_size, num_residues))

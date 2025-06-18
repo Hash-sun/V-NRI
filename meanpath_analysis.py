@@ -8,13 +8,17 @@ import networkx as nx
 #import ipysigma as ips
 
 parser = argparse.ArgumentParser(
-    'Find shortest paths along domains in residues.')
+    'Find mean shortest paths along domains in residues.')
 parser.add_argument('--num-residues', type=int, default=220,
                     help='Number of residues of the PDB.')
 parser.add_argument('--source-node', type=int, default=172,
                     help='source residue of the PDB')
-parser.add_argument('--outputfilename', type=str, default='data/p53-g266r/mean/4-Atten/no_end_source172-pro.txt',
+parser.add_argument('--outputfilename', type=str, default='data/no_end_source.txt',
                     help='File of shortest path from source to targets')
+parser.add_argument('--edges_a', type=str, default='data/pdb_a/logs/filtered_edges_12.npy',
+                    help='File of edge weights for pdb_a')
+parser.add_argument('--edges_b', type=str, default='data/pdb_b/logs/filtered_edges_12.npy',
+                    help='File of edge weights for pdb_b')
 args = parser.parse_args()
 
 def process(number):
@@ -31,10 +35,10 @@ def process(number):
 
     return str(result)
 
-edges_a = np.load('data/p53-g266r/trj1/4-Atten/filtered_edges_12.npy')
-edges_b = np.load('data/p53-g266r/trj2/4-Atten/new/filtered_edges_12.npy')
+# edges_a = np.load('data/logs/filtered_edges_12.npy')
+# edges_b = np.load('data/logs/filtered_edges_12.npy')
 
-edges = (edges_a + edges_b) / 2
+edges = (args.edges_a + args.edges_b) / 2
 edges_list = list()
 # Default: i->j
 for i in range(args.num_residues):
