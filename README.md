@@ -8,6 +8,7 @@ The training data are pdb files after molecular dynamics simulations. Place them
 python convert_dataset.py
 ```
 It can seperate train, validation and test dataset.
+You can download examples from https://zenodo.org/records/15687924?preview=1&token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjljMDViOTg4LTdjYjAtNGYyYS1iMWU3LTU0MWY0Zjk5ZWU4YiIsImRhdGEiOnt9LCJyYW5kb20iOiJkYTY0OWQxMzEwMDI5MWM3NjJmN2FjNTg2ZWIxZDQwNSJ9.Egz9HIL0_Iqby-eoZf-Xjl18dNDvltgGz79Eka9QuZXKBfYFuz7UcAYboweLP0HObTTmIdGipq5hROe0jJLQRg
 
 ## Train
 ```
