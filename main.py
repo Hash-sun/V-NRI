@@ -17,7 +17,7 @@ from modules import *
 
 
 parser = argparse.ArgumentParser(
-    'Neral relational inference for molecular dynamics simulations')
+    'Variant neral relational inference for molecular dynamics simulations')
 parser.add_argument('--num-residues', type=int, default=220,
                     help='Number of residues of the PDB.')
 parser.add_argument('--save-folder', type=str, default='logs',
