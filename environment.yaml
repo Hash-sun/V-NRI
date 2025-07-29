@@ -102,4 +102,3 @@ dependencies:
     - wandb==0.18.7
     - wheel==0.44.0
     - yarl==1.18.0
-prefix: /home/jbwei/anaconda3/envs/ppi
