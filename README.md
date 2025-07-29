@@ -31,14 +31,25 @@ It can seperate train, validation and test dataset.
 You can download examples from *zenodo*. The website is placed in ```data/download```.
 
 ## Train
+You can train the model with the following command
 ```
 python main.py
 ```
-
+These are the main arguments：
+* ```--num-residues``` - Number of residues of the PDB. 
+* ```--save-folder``` - Where to save the trained model, leave empty to not save anything. default='logs'
+* ```--epochs``` - Number of epochs to train.default=100
+* ```--encoder``` - Type of path encoder model (mlp , cnn or mlpatten).
+* ```--decoder``` - Type of decoder model (mlp, rnn, or sim).
+If you want to modify epoch and encoder, you can do so by:
+```
+python main.py - epoch 500 -encoder mlp
+```
 ## Test
 ```
 python test.py
 ```
+The main arguments are similar to the main.py, and you can change the them.
 We provide two test samples in ```example``` folder. 
 
 
