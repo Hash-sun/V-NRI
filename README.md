@@ -12,7 +12,7 @@ The repo mainly requires the following packages.
 * networkx 2.5
 
 In addition, the environment can be configured using the file provided.
-You can install the environment through the YML file with the following command
+You can install the environment through the YML file with the following command：
 ```
 conda env create -f ppi.yaml
 ```
