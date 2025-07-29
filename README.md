@@ -41,11 +41,12 @@ These are the main arguments：
 * ```--epochs``` - Number of epochs to train.default=100
 * ```--encoder``` - Type of path encoder model (mlp , cnn or mlpatten).
 * ```--decoder``` - Type of decoder model (mlp, rnn, or sim).
+* ```--number-exp``` - number of experiments.
 
 
 If you want to modify epoch and encoder, you can do so by:
 ```
-python main.py - epoch 500 -encoder mlp
+python main.py --epoch 500 --encoder mlp
 ```
 ## Test
 ```
