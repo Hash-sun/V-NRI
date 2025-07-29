@@ -4,14 +4,23 @@ Protein allostery is a critical regulatory mechanism in various biological proce
 ![graphical abstract](https://github.com/user-attachments/assets/3d5ba1fa-a32b-4078-be44-299fe8a31515)
 
 ## Requirment
-The environment can be configured using the file provided.
+The repo mainly requires the following packages.
+* Python >= 3.7
+* Pytorch >= 1.2
+* numpy == 1.26
+* pandas == 2.2.3
+* networkx 2.5
+
+In addition, the environment can be configured using the file provided.
 You can install the environment through the YML file with the following command
-'''
+```
 conda env create -f ppi.yaml
-'''
-'''
+```
+```
 conda activate ppi
-'''
+```
+
+
 
 ## data process
 The training data are pdb files after molecular dynamics simulations. Place them in ```data/pdb``` folder.
