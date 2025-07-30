@@ -28,7 +28,7 @@ The training data are pdb files after molecular dynamics simulations. Place them
 python convert_dataset.py
 ```
 It can seperate train, validation and test dataset.
-You can download examples from *zenodo*. The website is placed in ```data/download```.
+You can download examples from *zenodo*. The website is https://doi.org/10.5281/zenodo.15687924.
 
 ## Train
 You can train the model with the following command
