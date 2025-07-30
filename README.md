@@ -23,7 +23,7 @@ conda activate ppi
 
 
 ## data process
-The training data are pdb files after molecular dynamics simulations. Place them in ```data/pdb``` folder.
+The training data are pdb files after molecular dynamics simulations. Place them in ```data/pdb``` folder (Need to Download).
 ```
 python convert_dataset.py
 ```
