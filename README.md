@@ -46,11 +46,10 @@ These are the main arguments：
 * ```--decoder``` - Type of decoder model (mlp, rnn, or sim).
 * ```--number-exp``` - number of experiments.
 
-If not explicitly declared, the default values are used
-
-If you want to modify epoch and encoder, you can do so by:
+If not explicitly declared, the default values are used.
+Or you want to modify some, you can do so by:
 ```
-python main.py --epoch 500 --encoder mlp --timesteps 60
+python main.py --epochs 500 --encoder mlp --timesteps 60
 ```
 ## Test
 ```
