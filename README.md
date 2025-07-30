@@ -28,7 +28,7 @@ The training data are pdb files after molecular dynamics simulations. Place them
 python convert_dataset.py
 ```
 It can seperate train, validation and test dataset.
-You can download examples from *zenodo*. The website is https://doi.org/10.5281/zenodo.15687924.
+You can download examples from *zenodo* (https://doi.org/10.5281/zenodo.15687924).
 
 ## Train
 You can train the model with the following command
@@ -39,6 +39,7 @@ These are the main arguments：
 * ```--num-residues``` - Number of residues of the PDB. 
 * ```--save-folder``` - Where to save the trained model, leave empty to not save anything. default='logs'
 * ```--epochs``` - Number of epochs to train.default=100
+* ```--timesteps``` - The number of time steps per sample.
 * ```--encoder``` - Type of path encoder model (mlp , cnn or mlpatten).
 * ```--decoder``` - Type of decoder model (mlp, rnn, or sim).
 * ```--number-exp``` - number of experiments.
@@ -46,7 +47,7 @@ These are the main arguments：
 
 If you want to modify epoch and encoder, you can do so by:
 ```
-python main.py --epoch 500 --encoder mlp
+python main.py --epoch 500 --encoder mlp --timesteps 60
 ```
 ## Test
 ```
@@ -54,6 +55,6 @@ python test.py
 ```
 The main arguments are similar to the main.py, and you can change the them.
 We provide two test samples in ```example``` folder. 
-You can download the version of model that we trained from https://doi.org/10.5281/zenodo.15687924
+You can download the model that we trained from https://doi.org/10.5281/zenodo.15687924
 
 
