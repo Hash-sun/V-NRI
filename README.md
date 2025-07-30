@@ -45,6 +45,7 @@ These are the main arguments：
 * ```--encoder``` - Type of path encoder model (mlp , cnn or mlpatten).
 * ```--decoder``` - Type of decoder model (mlp, rnn, or sim).
 * ```--number-exp``` - number of experiments.
+
 If not explicitly declared, the default values are used
 
 If you want to modify epoch and encoder, you can do so by:
