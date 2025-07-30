@@ -10,6 +10,8 @@ The repo mainly requires the following packages.
 * numpy == 1.26
 * pandas == 2.2.3
 * networkx 2.5
+* others
+  
 
 In addition, the environment can be configured using the file provided.
 You can install the environment through the YML file with the following command：
@@ -43,7 +45,7 @@ These are the main arguments：
 * ```--encoder``` - Type of path encoder model (mlp , cnn or mlpatten).
 * ```--decoder``` - Type of decoder model (mlp, rnn, or sim).
 * ```--number-exp``` - number of experiments.
-
+If not explicitly declared, the default values are used
 
 If you want to modify epoch and encoder, you can do so by:
 ```
