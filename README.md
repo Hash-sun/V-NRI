@@ -56,7 +56,7 @@ python main.py --epochs 500 --encoder mlp --timesteps 60
 python test.py
 ```
 The main arguments are similar to the main.py, and you can change the them.
-We provide two test samples in ```example``` folder. 
-You can download the model that we trained from https://doi.org/10.5281/zenodo.15687924
+
+We provide two test samples. You can download the model that we trained and examples from https://doi.org/10.5281/zenodo.15687924.
 
 
